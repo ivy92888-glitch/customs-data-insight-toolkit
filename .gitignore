@@ -1,0 +1,36 @@
+# ---- Python 编译产物 ----
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+
+# ---- 输出产物（图表、报告） ----
+# 分析过程会在 output_mock/、output_real/ 等目录下生成 PNG/MD/DOCX
+# 这些是分析结果，不进 git；由使用者自己跑出来
+output*/
+*.docx
+*.png
+*.jpg
+*.jpeg
+*.md
+
+# ---- 真实数据 ----
+# 绝对不要把真实 Excel 数据放进来！
+# 用户本地路径 E:\已上传云文档（或任何私有路径）
+**/已上传云文档/**
+*.xlsx
+!tests/sample.xlsx
+
+# ---- IDE / 系统 ----
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# ---- 密钥（虽然当前项目不用，但保险） ----
+.env
+.env.*
+*.pem
+*.key
