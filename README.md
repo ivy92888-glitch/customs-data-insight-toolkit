@@ -1,4 +1,4 @@
-# 清关数据洞察工具包（Customs Data Insight Toolkit）
+# 清关数据洞察工具包 · Customs Data Insight Toolkit
 
 > 每天对着几十份 Excel 清关资料人工算密度、翻品名、猜 HS 编码？这份 Python 脚本就是为了把那 4 小时的手动核对，变成 5 分钟一键出图 + 一页 Word 报告。
 
@@ -98,12 +98,112 @@ python -m pip install pandas numpy matplotlib seaborn openpyxl python-docx faker
 ```
 
 ---
+---
+---
 
-## Summary（English）
+# English（英文）
 
-A Python toolkit for customs-clearance / supply-chain teams that reads real Excel workbooks and produces **4 charts + a Word (.docx) insight report** in one click.
+> Staring at dozens of Excel customs-clearance files every month — manually checking density, guessing product names, hunting down HS codes? This Python toolkit cuts that 4-hour ritual down to a 5-minute one-click run: charts + a Word report, done.
 
-- 4 dimensions: **volumetric loss**, **customer profiling**, **data-quality cost**, **compliance matrix**
-- Includes a **Faker-based mock-data generator** so anyone can clone & run self-tests with zero real data
-- Real-world pain point it solves: **4–6 hours of manual report-writing → 5 minutes**
-- All scripts have been privacy-sanitized; `.gitignore` blocks real Excel datasets
+---
+
+## What it does
+
+| Feature | In plain English | A real number |
+|---------|------------------|---------------|
+| 📦 **Volumetric-loss scanner** | Flags "space-hog, money-losing" cargo whose density dips below the logistics-industry threshold of 167 kg/CBM, ranks the top 10 worst offenders | **46.5%** of cargo is bubble cargo — nearly half your container space is burning money on volume-based pricing |
+| 👤 **Customer-brand profiling** | Measures how many products carry a known brand, then compares brand-owning vs. non-brand-owning customers on material and usage split | **99.2% brand-awareness rate** — these folks are doing serious operations, meaning they're your high-NWI core. Keep them happy. |
+| 🧹 **Vague-name detection** | Scans Chinese product titles for fuzzy tokens like 套装/配件/混装/other, quantifies the share that needs manual cleaning, and spits out the monthly labor cost | **1.9% fuzzy rate → 19 hours / month ≈ ¥1,900** — cold, hard ROI case for a name-to-HS auto-matching engine |
+| 🌐 **Country × customs-declaration matrix** | Cross-tab of destination country vs. 有单证/无单证 (documented / undocumented) as a stacked bar | **Germany: 64.9% undocumented** (92 shipments) — compliance risk, right there |
+| 📄 **Word report generator** | Packs charts + tables + management recommendations into a single .docx insight report | **5 minutes** to generate, versus 4–6 hours of manual copying |
+| 🧪 **Self-test with mock data** | Ships with a Faker-based generator that produces 2,000 rows of realistic data so you can clone and run end-to-end with zero real Excel files | **3 minutes to first result after clone** — zero config |
+
+---
+
+## Who this is for
+
+- **Customs-clearance data analysts** — monthly business reports for the boss that currently eat 4 days of your life
+- **Cross-border e-commerce ops** — wondering which SKUs are paying the same freight as if they shipped bricks
+- **Supply-chain managers** — need a data-backed pitch on why process optimization actually pays for itself
+- **Data product managers** — looking for real-world ROI numbers to justify building automation
+
+All of these roles stare at the same thing: **a folder full of Excel files, each with two sheets — Loading List (装柜清单) and Raw Data (原数据)**. The toolkit recursively scans every subfolder and stitches them together automatically.
+
+---
+
+## Demo screenshots (sanitized mock data, no real customer info)
+
+### Dimension 1: Top 10 most bubble cargo + channel throughput
+
+![](demo/chart1_volumetric_loss.png)
+
+### Dimensions 2 & 3: Customer-brand split + vague-name cost breakdown
+
+![](demo/chart2_customer_profile.png)
+
+![](demo/chart3_data_quality.png)
+
+### Dimension 4: Country × customs compliance matrix
+
+![](demo/chart4_compliance_matrix.png)
+
+---
+
+## Quick start
+
+### Windows: double-click `run.bat`
+
+```batch
+run.bat
+```
+
+It handles dependency install, runs a mock analysis, and writes charts + reports into `output\`. Just wait and open that folder.
+
+### macOS / Linux
+
+```bash
+chmod +x run.sh
+./run.sh
+```
+
+### CLI options (advanced)
+
+```bash
+python supply_chain_analyzer.py --mock --rows 5000 --output output_mock
+python supply_chain_analyzer.py --real --max-files 30 --output output_real
+python build_word_report.py  --real --max-files 30 --output output_real
+```
+
+You'll get 4 PNG charts, a Markdown insight report, and a Word (.docx) business report — all dropped into the output folder in one pass.
+
+---
+
+## What's in the repo
+
+| File | One-line description |
+|------|---------------------|
+| `supply_chain_analyzer.py` | Core engine — `SupplyChainAnalyzer` class, four per-dimension methods, plus a `generate_mock_data()` self-test helper |
+| `build_word_report.py` | Wraps analysis results into a nicely formatted .docx with charts, tables, and management recommendations |
+| `run.bat` / `run.sh` | One-click launchers that auto-install deps, run mock data, and drop results |
+| `demo/` | Four sanitized mock-data screenshots referenced by this README |
+| `.gitignore` | Keeps real Excel, generated outputs, and caches out of version control |
+
+---
+
+## Tech stack
+
+`Python 3.9+` · `pandas` · `numpy` · `matplotlib` · `seaborn` · `openpyxl` · `python-docx` · `Faker`
+
+Install everything in one shot:
+
+```bash
+python -m pip install pandas numpy matplotlib seaborn openpyxl python-docx faker
+```
+
+---
+
+## License & notes
+
+MIT — use it, fork it, ship it. Attribution appreciated but not required.
+
+All scripts have been privacy-sanitized (no former-company names, channel codes, brand names, or internal warehouse IDs remain). The `.gitignore` blocks real Excel datasets. **Never commit your real workbook files.**
